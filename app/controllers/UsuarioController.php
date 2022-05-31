@@ -24,6 +24,25 @@ class UsuarioController extends Usuario implements IApiUsable
           ->withHeader('Content-Type', 'application/json');
     }
 
+    public function ChequearUno($request, $response, $args){
+    /*  $parametros = $request->getParsedBody();
+
+      $usuario = $parametros['usuario'];
+      $clave = $parametros['clave'];
+
+      // Creamos el usuario
+      $usr = new Usuario();
+      $usr->usuario = $usuario;
+      $usr->clave = $clave;
+      $usr->crearUsuario();*/
+
+      $payload = json_encode(array("mensaje" => "Paso por el controlador"));
+
+      $response->getBody()->write($payload);
+      return $response
+        ->withHeader('Content-Type', 'application/json');
+  }
+
     public function TraerUno($request, $response, $args)
     {
         // Buscamos usuario por nombre
@@ -43,7 +62,8 @@ class UsuarioController extends Usuario implements IApiUsable
 
         $response->getBody()->write($payload);
         return $response
-          ->withHeader('Content-Type', 'application/json');
+          ->withHeader('Content-Type', 'application/json')
+          ->withStatus(302);
     }
     
     public function ModificarUno($request, $response, $args)
@@ -73,4 +93,5 @@ class UsuarioController extends Usuario implements IApiUsable
         return $response
           ->withHeader('Content-Type', 'application/json');
     }
+    
 }
