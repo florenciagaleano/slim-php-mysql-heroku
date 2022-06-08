@@ -15,7 +15,7 @@ require __DIR__ . '/../vendor/autoload.php';
 require_once './db/AccesoDatos.php';
 require_once './middlewares/Logger.php';
 
-require_once './controllers/UsuarioController.php';
+require_once './controllers/EmpleadoController.php';
 
 // Load ENV
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
@@ -34,13 +34,13 @@ $app->addErrorMiddleware(true, true, true);
 $app->addBodyParsingMiddleware();
 
 // Routes
-$app->group('/usuarios', function (RouteCollectorProxy $group) {
-    $group->get('[/]', \UsuarioController::class . ':TraerTodos');
-    $group->get('/{usuario}', \UsuarioController::class . ':TraerUno');
-    $group->post('[/]', \UsuarioController::class . ':CargarUno');
+$app->group('/empleados', function (RouteCollectorProxy $group) {
+    /* $group->get('[/]', \UsuarioController::class . ':TraerTodos');
+    $group->get('/{usuario}', \UsuarioController::class . ':TraerUno'); */
+    $group->post('[/]', \EmpleadoController::class . ':CargarUno');
   });
 
-$app->group('/credenciales', function (RouteCollectorProxy $group) {
+/* $app->group('/credenciales', function (RouteCollectorProxy $group) {
   $group->get('[/]', \UsuarioController::class . ':TraerTodos');
   $group->post('[/]', \UsuarioController::class . ':ChequearUno');
 })->add(\Logger::class . ':VerificarCredenciales');
@@ -54,6 +54,6 @@ $app->get('[/]', function (Request $request, Response $response) {
     $response->getBody()->write("Slim Framework 4 PHP");
     return $response;
 
-});
+}); */
 
 $app->run();
