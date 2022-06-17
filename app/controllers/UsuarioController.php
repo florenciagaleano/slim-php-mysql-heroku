@@ -1,8 +1,9 @@
 <?php
 require_once './models/Usuario.php';
+require_once './models/Empleado.php';
 require_once './interfaces/IApiUsable.php';
 
-class UsuarioController extends Usuario implements IApiUsable
+class UsuarioController extends Empleado implements IApiUsable
 {
     public function CargarUno($request, $response, $args)
     {
@@ -38,11 +39,15 @@ class UsuarioController extends Usuario implements IApiUsable
 
     public function TraerTodos($request, $response, $args)
     {
-        $lista = Usuario::obtenerTodos();
-        $payload = json_encode(array("listaUsuario" => $lista));
+      $objAccesoDatos = AccesoDatos::obtenerInstancia();
+      $consulta = $objAccesoDatos->prepararConsulta("SELECT id, tipo, fecha_de_registro FROM empleado");
+      $consulta->execute();
 
-        $response->getBody()->write($payload);
-        return $response
+      $array = $consulta->fetchAll();
+      $payload = json_encode(array("mensaje" =>  $array));
+
+          $response->getBody()->write($payload);
+          return $response
           ->withHeader('Content-Type', 'application/json');
     }
     

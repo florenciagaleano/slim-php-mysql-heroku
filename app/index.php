@@ -15,6 +15,8 @@ require_once './db/AccesoDatos.php';
 require_once './middlewares/AutentificadorJWT.php';
 
 require_once './controllers/UsuarioController.php';
+require_once './controllers/Empleadocontroller.php';
+
 
 // Load ENV
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
@@ -22,6 +24,7 @@ $dotenv->safeLoad();
 
 // Instantiate App
 $app = AppFactory::create();
+
 
 // Add error middleware
 $app->addErrorMiddleware(true, true, true);
@@ -111,5 +114,12 @@ $app->get('[/]', function (Request $request, Response $response) {
   $response->getBody()->write("Slim Framework 4 PHP");
   return $response;
 });
+
+$app->group('/empleados', function (RouteCollectorProxy $group) {
+  $group->get('[/]', \EmpleadoController::class . ':TraerTodos');
+  $group->get('/{empleado}', \EmpleadoController::class . ':TraerUno');
+  $group->post('[/]', \EmpleadoController::class . ':CargarUno');
+});
+
 
 $app->run();
