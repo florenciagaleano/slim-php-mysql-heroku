@@ -10,19 +10,38 @@ class UsuarioController extends Usuario implements IApiUsable
 
         $usuario = $parametros['usuario'];
         $clave = $parametros['clave'];
+        $tipo = $parametros['tipo'];
 
         // Creamos el usuario
         $usr = new Usuario();
         $usr->usuario = $usuario;
         $usr->clave = $clave;
+        //  $usr->tipo = $tipo;
+        $this->setTipo($tipo);
+        $usr->activo = true;
         $usr->crearUsuario();
 
         $payload = json_encode(array("mensaje" => "Usuario creado con exito"));
 
         $response->getBody()->write($payload);
+        echo 'hola';
         return $response
           ->withHeader('Content-Type', 'application/json');
     }
+
+    public function setTipo($tipo){
+      if(strtolower($tipo) != "bartender" &&
+      strtolower($tipo) != "cervecero" &&
+      strtolower($tipo) != "cocinero" &&
+      strtolower($tipo) != "socio" &&
+      strtolower($tipo) != "mozo")
+      {
+          $this->tipo = "mozo";
+      }else{
+          $this->tipo = $tipo;
+      }
+  }
+
 
     public function TraerUno($request, $response, $args)
     {

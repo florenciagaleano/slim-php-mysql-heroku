@@ -5,14 +5,19 @@ class Usuario
     public $id;
     public $usuario;
     public $clave;
+    public $activo;
+    public $tipo;
 
     public function crearUsuario()
     {
         $objAccesoDatos = AccesoDatos::obtenerInstancia();
-        $consulta = $objAccesoDatos->prepararConsulta("INSERT INTO usuarios (usuario, clave) VALUES (:usuario, :clave)");
-        $claveHash = password_hash($this->clave, PASSWORD_DEFAULT);
+        $consulta = $objAccesoDatos->prepararConsulta("INSERT INTO usuarios (usuario, clave, tipo, fecha_de_registro, activo) VALUES (:usuario, :clave, :tipo, :fecha_de_registro, :activo)");
         $consulta->bindValue(':usuario', $this->usuario, PDO::PARAM_STR);
-        $consulta->bindValue(':clave', $claveHash);
+        $consulta->bindValue(':clave', $this->clave, PDO::PARAM_STR);
+        $consulta->bindValue(':tipo', $this->tipo, PDO::PARAM_STR);
+        $consulta->bindValue(':fecha_de_registro', (new DateTime('now'))->format('Y-m-d'), PDO::PARAM_STR);
+        $consulta->bindValue(':activo', $this->activo, PDO::PARAM_BOOL);
+
         $consulta->execute();
 
         return $objAccesoDatos->obtenerUltimoId();
