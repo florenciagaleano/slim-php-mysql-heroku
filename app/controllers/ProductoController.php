@@ -1,51 +1,47 @@
 <?php
-require_once './models/Usuario.php';
+require_once './models/Producto.php';
 require_once './interfaces/IApiUsable.php';
 
-class UsuarioController extends Usuario implements IApiUsable
+class ProductoController extends Producto implements IApiUsable
 {
     public function CargarUno($request, $response, $args)
     {
         $parametros = $request->getParsedBody();
 
-        $usuario = $parametros['usuario'];
-        $clave = $parametros['clave'];
+        $descripcion = $parametros['descripcion'];
         $tipo = $parametros['tipo'];
+        $precio = $parametros['precio'];
 
-        // Creamos el usuario
-        $usr = new Usuario();
-        $usr->usuario = $usuario;
-        $usr->clave = $clave;
-        //  $usr->tipo = $tipo;
-        //$this->setTipo($tipo);
-        $usr->activo = true;
-        $usr->setTipo($tipo);
-        $usr->crearUsuario();
+        $producto = new Producto();
+        $producto->descripcion = $descripcion;
+        $producto->tipo = $tipo;
+        $producto->precio = $precio;
 
-        $payload = json_encode(array("mensaje" => "Usuario creado con exito"));
+        $producto->crearProducto();
+
+        $payload = json_encode(array("mensaje" => "Producto creado con exito"));
 
         $response->getBody()->write($payload);
         return $response
           ->withHeader('Content-Type', 'application/json');
     }
 
-
     public function TraerUno($request, $response, $args)
     {
         // Buscamos usuario por nombre
-        $usr = $args['usuario'];
+        /* $usr = $args['usuario'];
         $usuario = Usuario::obtenerUsuario($usr);
         $payload = json_encode($usuario);
 
         $response->getBody()->write($payload);
         return $response
-          ->withHeader('Content-Type', 'application/json');
+          ->withHeader('Content-Type', 'application/json'); */
     }
 
     public function TraerTodos($request, $response, $args)
     {
-        $lista = Usuario::obtenerTodos();
-        $payload = json_encode(array("listaUsuario" => $lista));
+        $lista = Producto::obtenerTodos();
+        $payload = json_encode(array("listaProductos" => $lista));
 
         $response->getBody()->write($payload);
         return $response
@@ -54,7 +50,7 @@ class UsuarioController extends Usuario implements IApiUsable
     
     public function ModificarUno($request, $response, $args)
     {
-        $parametros = $request->getParsedBody();
+        /* $parametros = $request->getParsedBody();
 
         $nombre = $parametros['nombre'];
         Usuario::modificarUsuario($nombre);
@@ -63,12 +59,12 @@ class UsuarioController extends Usuario implements IApiUsable
 
         $response->getBody()->write($payload);
         return $response
-          ->withHeader('Content-Type', 'application/json');
+          ->withHeader('Content-Type', 'application/json'); */
     }
 
     public function BorrarUno($request, $response, $args)
     {
-        $parametros = $request->getParsedBody();
+        /* $parametros = $request->getParsedBody();
 
         $usuarioId = $parametros['usuarioId'];
         Usuario::borrarUsuario($usuarioId);
@@ -77,6 +73,6 @@ class UsuarioController extends Usuario implements IApiUsable
 
         $response->getBody()->write($payload);
         return $response
-          ->withHeader('Content-Type', 'application/json');
+          ->withHeader('Content-Type', 'application/json'); */
     }
 }

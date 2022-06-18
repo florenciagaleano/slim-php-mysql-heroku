@@ -1,51 +1,49 @@
 <?php
-require_once './models/Usuario.php';
+require_once './models/Mesa.php';
 require_once './interfaces/IApiUsable.php';
 
-class UsuarioController extends Usuario implements IApiUsable
+class MesaController extends Mesa implements IApiUsable
 {
-    public function CargarUno($request, $response, $args)
+    public function CargarUno($request, $response, $args) //no me tienen que manar nada en el POST
     {
         $parametros = $request->getParsedBody();
 
-        $usuario = $parametros['usuario'];
-        $clave = $parametros['clave'];
-        $tipo = $parametros['tipo'];
+        $codigo = $parametros['codigo'];
 
-        // Creamos el usuario
-        $usr = new Usuario();
-        $usr->usuario = $usuario;
-        $usr->clave = $clave;
-        //  $usr->tipo = $tipo;
-        //$this->setTipo($tipo);
-        $usr->activo = true;
-        $usr->setTipo($tipo);
-        $usr->crearUsuario();
+        $mesa = new Mesa();
+        $mesa->estado = Mesa::ESPERANDO_PEDIDO;
+        $payload = "";
+        if($mesa->setCodigo($codigo)){
+            $mesa->codigo = $codigo;
+            $mesa->crearMesa();
 
-        $payload = json_encode(array("mensaje" => "Usuario creado con exito"));
+            $payload = json_encode(array("mensaje" => "Mesa creada con exito"));
+        }else{
+            $payload = json_encode(array("mensaje" => "Codigo invalido"));
+        }
+        
 
         $response->getBody()->write($payload);
         return $response
           ->withHeader('Content-Type', 'application/json');
     }
 
-
     public function TraerUno($request, $response, $args)
     {
         // Buscamos usuario por nombre
-        $usr = $args['usuario'];
+        /* $usr = $args['usuario'];
         $usuario = Usuario::obtenerUsuario($usr);
         $payload = json_encode($usuario);
 
         $response->getBody()->write($payload);
         return $response
-          ->withHeader('Content-Type', 'application/json');
+          ->withHeader('Content-Type', 'application/json'); */
     }
 
     public function TraerTodos($request, $response, $args)
     {
-        $lista = Usuario::obtenerTodos();
-        $payload = json_encode(array("listaUsuario" => $lista));
+        $lista = Mesa::obtenerTodos();
+        $payload = json_encode(array("listaMesas" => $lista));
 
         $response->getBody()->write($payload);
         return $response
@@ -54,7 +52,7 @@ class UsuarioController extends Usuario implements IApiUsable
     
     public function ModificarUno($request, $response, $args)
     {
-        $parametros = $request->getParsedBody();
+        /* $parametros = $request->getParsedBody();
 
         $nombre = $parametros['nombre'];
         Usuario::modificarUsuario($nombre);
@@ -63,12 +61,12 @@ class UsuarioController extends Usuario implements IApiUsable
 
         $response->getBody()->write($payload);
         return $response
-          ->withHeader('Content-Type', 'application/json');
+          ->withHeader('Content-Type', 'application/json'); */
     }
 
     public function BorrarUno($request, $response, $args)
     {
-        $parametros = $request->getParsedBody();
+        /* $parametros = $request->getParsedBody();
 
         $usuarioId = $parametros['usuarioId'];
         Usuario::borrarUsuario($usuarioId);
@@ -77,6 +75,6 @@ class UsuarioController extends Usuario implements IApiUsable
 
         $response->getBody()->write($payload);
         return $response
-          ->withHeader('Content-Type', 'application/json');
+          ->withHeader('Content-Type', 'application/json'); */
     }
 }

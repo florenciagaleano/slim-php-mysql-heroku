@@ -15,6 +15,8 @@ require_once './db/AccesoDatos.php';
 require_once './middlewares/AutentificadorJWT.php';
 
 require_once './controllers/UsuarioController.php';
+require_once './controllers/ProductoController.php';
+require_once './controllers/MesaController.php';
 
 // Load ENV
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
@@ -32,6 +34,16 @@ $app->group('/usuarios', function (RouteCollectorProxy $group) {
   $group->get('[/]', \UsuarioController::class . ':TraerTodos');
   $group->get('/{usuario}', \UsuarioController::class . ':TraerUno');
   $group->post('[/]', \UsuarioController::class . ':CargarUno');
+});
+
+$app->group('/productos', function (RouteCollectorProxy $group) {
+  $group->get('[/]', \ProductoController::class . ':TraerTodos');
+  $group->post('[/]', \ProductoController::class . ':CargarUno');
+});
+
+$app->group('/mesas', function (RouteCollectorProxy $group) {
+  $group->get('[/]', \MesaController::class . ':TraerTodos');
+  $group->post('[/]', \MesaController::class . ':CargarUno');
 });
 
 // JWT test routes
