@@ -29,4 +29,12 @@ class Producto
         return $consulta->fetchAll(PDO::FETCH_CLASS, 'Producto');
     }
 
+    public static function buscarPorId($id){
+        $objAccesoDatos = AccesoDatos::obtenerInstancia();
+        $consulta = $objAccesoDatos->prepararConsulta("SELECT * FROM productos WHERE id = :id");
+        $consulta->bindValue(':id', $id, PDO::PARAM_INT);
+        $consulta->execute();
+
+        return $consulta->fetchObject('Producto');    }
+
 }

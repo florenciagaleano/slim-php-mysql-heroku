@@ -40,6 +40,17 @@ class Mesa
         return $consulta->fetchAll(PDO::FETCH_CLASS, 'Mesa');
     }
 
+    public static function buscarPorId($id){
+        $objAccesoDatos = AccesoDatos::obtenerInstancia();
+        $consulta = $objAccesoDatos->prepararConsulta("SELECT * FROM mesas WHERE id = :id");
+        $consulta->bindValue(':id', $id, PDO::PARAM_INT);
+        $consulta->execute();
+
+        return $consulta->fetchObject('Mesa');
+        //return $objAccesoDatos->fetchColumn();
+
+    }
+
 
     /*private static function GenerarCodigo(){
         $input = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
